@@ -152,6 +152,19 @@ Once a pod reaches completion (has a `restartPolicy` of `Never` or `OnFailure` a
 The metrics are exposed at the HTTP endpoint `/metrics/resources` and require the same authorization as the `/metrics`
 endpoint on the scheduler. You must use the `--show-hidden-metrics-for-version=1.20` flag to expose these alpha stability metrics.
 
+## Disable problematic metrics
+
+You can explicitly turn off misbehaving metrics via CLI flag `--disabled-metrics`. The input is a list of disabled metrics(i.e. `--disabled-metrics=metric1,metric2`).
+## Metric Cardinality Enforcement
+
+Metrics with unbounded dimensions could cause memory issues in the components they instrument. To solve this problem, we introduce a flag `--allow-label-value` to  dynamically configure an allow-list of label values for a metric.
+
+In alpha stage, the flag can only take in the allow-list value which is a [StringToString](https://pkg.go.dev/github.com/spf13/pflag#StringToStringVar) type argument from the CLI with the format 
+
+`--allow-label-value <metric_name>,<label_name>='<allow_value1>, <allow_value2>...', <metric_name2>,<label_name>='<allow_value1>, <allow_value2>...', ...`.
+
+Here is an example input.
+`--allow-label-value metric1,label1='v1,v2,v3', metric1,label2='v4,v5', metric2,label3='v6'`
 
 ## {{% heading "whatsnext" %}}
 
